@@ -1,0 +1,12 @@
+*Met les mots que tu veux traduire dans le fichier "wordstocheck.txt", une ligne par mot
+*Lance le program "ActualProgram.py" dans python (parfois il faut le lancer 2 fois pour qu'il marche)
+*Profit (les mots traduit sont à la ligne, parfaitement dans le même ordre dans le fichier "englishwords.txt")
+
+Attention: certains mots (surtout si tu essaye de traduire des mots qui sont en réalités des bouts de phrase)
+ne vont pas avoir de traduction dans ce dictionnaire et seront traduit en tant que "Error", le fichier "errorwords.txt" te dit 
+quels sont les mots qui sont à l'origine de ces erreures (les mots sont écrits dans l'ordre), mais si tu avait ctrl+v tes mots en chinois
+dans une colonne excel, et ctrl+v le contenu de "englishwords.txt" à une colonne adjacente, tu vois immédiatement quels mots ont créé
+des erreures. 
+
+Pour les pinyins j'utilise ce site web: 
+https://www.chineseconverter.com/en/convert/chinese-to-pinyin

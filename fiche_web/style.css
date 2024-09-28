@@ -1,0 +1,68 @@
+body {
+    background-color: rgb(86, 167, 195);
+  }
+  
+  h1 {
+    color: white;
+    text-align: center;
+  }
+  
+  p {
+    font-family: verdana;
+    font-size: 20px;
+  }
+
+  div{
+    color: white;
+    text-align: center;
+    font-family:'Times New Roman', Times, serif;
+    font-size: 40px;
+    margin-top:20px
+  }
+
+  div:not(:last-child) {
+    margin-bottom: 50px;
+  }
+
+a{
+  margin-bottom: 40px;
+}
+
+
+   /* unvisited link */
+a:link {
+    text-decoration: none;
+    color: white;
+  }
+  
+  /* visited link */
+  a:visited {
+    text-decoration: none;
+    color: white; 
+  }
+  
+  /* mouse over link */
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* selected link */
+  a:active {
+    text-decoration: underline;
+  } 
+
+div#returntomenu{
+  color: red !important;
+  background-color: rgb(23, 42, 99);
+  position: fixed;
+  bottom: 0;
+  right: 35%;
+  width: 30%;
+  /*border: 5px solid #ad2121;*/
+}
+
+a#sortingMethodMenu{
+  position: fixed;
+  bottom: 45%;
+  right: 37%
+}
