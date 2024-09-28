@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang = "fra">
+    <head>
+        <title> Les bibliothèques dans Python</title>
+        <link rel = "stylesheet" href = "../style.css">
+        <meta charset = "UTF-8">
+        <meta http-equiv="Content-type" content = "text/html; charset=UTF-8">
+    </head>
+    <body>
+        <div class = "bruh">
+            <pre class = "explication">
+Les commandes à connaitre pour importer des bibiliothèques:
+    1. import ... as ...
+    2. from ... import ... 
+            </pre>
+        </div>
+        <h3>
+            0. Préliminaires: installer une bibiliothèque sur python
+        </h3>
+        <div class= "bruh">
+            <pre class = "explication">
+                Python a de nombreuses "bibliothèques" avec des types et elements prédéfinies.
+                Mais pouvoir utiliser une bibliothèque il faut déjà l'avoir installé!
+
+                Si vous aviez installé Python via une appli (le cas de 99% des gens):
+                    - Suivez les instructions que vous donne votre appli
+
+
+                Si vous aviez installé Python vous-même:
+                Si vous avez un ordinateur Windows:
+                    - ouvrez le command prompt (Appuyez le symbole "windows" + r, 
+                    puis écrivez "cmd" dans la page qui s'ouvre)
+                    - vérifiez sous quel nom python est installé:
+                    <code class = "language-bash">
+                          py --version
+                          python --version
+                          python3 --version
+                    </code>
+                    - L'instruction qui vous donnera un résultat (qui n'est pas un message d'erreur)
+                    correspond au nom qu'a Python dans votre ordinateur
+                    - Vérifiez que pip est bien installé:
+                    <code class = "language-bash">
+                          nom_de_python -m pip --version
+                    </code>
+                    - Si pip n'est pas installé alors:
+                    <code class = "language-bash">
+                         nom_de_python -m ensurepip --default-pip
+                    </code>
+                    - Pour installer une biblithèque il suffit d'écrire:
+                    <code class = "language-bash">
+                         nom_de_python -m pip install nom_de_la_bibiliothèque
+                    </code>
+                    Ex: 
+                    <code class = "language-bash">
+                         py -m pip install numpy 
+                    </code>
+                
+                Si vous avez un ordinateur Mac ou Linux:
+                    - ouvrez le terminal (Appuyez le symbole "Command" + Espace, 
+                    puis écrivez "Terminal" dans la page qui s'ouvre)
+                    - vérifiez sous quel nom python est installé:
+                    <code class = "language-bash">
+                          py --version
+                          python --version
+                          python3 --version
+                    </code>
+                    - L'instruction qui vous donnera un résultat (qui n'est pas un message d'erreur)
+                    correspond au nom qu'a Python dans votre ordinateur
+                    - Vérifiez que pip est bien installé:
+                    <code class = "language-bash">
+                          nom_de_python -m pip --version
+                    </code>
+                    - Si pip n'est pas installé alors:
+                    <code class = "language-bash">
+                         nom_de_python -m ensurepip --default-pip
+                    </code>
+                    - Pour installer une biblithèque il suffit d'écrire:
+                    <code class = "language-bash">
+                         nom_de_python -m pip install nom_de_la_bibiliothèque
+                    </code>
+                    Ex: 
+                    <code class = "language-bash">
+                         py -m pip install numpy 
+                    </code> 
+
+            </pre>
+        </div>
+        <h3> 
+            1. import ... as ...
+        </h3>
+        <div class = "bruh">
+            <pre class = "explication">
+                Pour utiliser une bibiliothèque il faut l'importer:
+                <code class = "language-python">
+                    import nom_de_la_bibiliothèque
+                    # Ex:
+                    import numpy
+                </code>
+                On peut ensuite librement utiliser les elements définies dans 
+                cette bibiliothèque.
+
+                Cependant il faudra TOUJOURS préciser de quelle bibiliothèque 
+                vient notre element.
+
+                Pour préciser la bibiliothèque d'où vient la element, 
+                On écrit: nom_de_la_bibiliothèque.element_utilisée
+
+                Par exemple le code qui suit ne marchera pas:
+                <code class = "language-python">
+                    import numpy 
+                    a = array([[1,0], [0,1]])
+                </code> 
+                Alors que celui-ci fonctionne:
+                <code class = "language-python">
+                    import numpy 
+                    a = numpy.array([[1,0], [0,1]])
+                </code> 
+
+                Certaines bibiliothèques ont des <a id = "sous_lib" style = "color:black">sous-bibliothèques</a>.
+                Pour les importer il suffit d'ajouter un ' . ' derrière le nom
+                de la bibliothèque, suivi du nom de la sous bibiliothèque
+                Par exemple:
+                <code class="language-python">
+                    import numpy.random
+                    a = numpy.random.randint(1, 10)
+                    print(a)
+                </code> 
+
+                Les sous-librairies à connaitre sont:
+                    - pyplot (qui est une sous-bibliothèques de matplotlib)
+                    - linalg (qui est une sous-bibliothèques de numpy)
+                    - random (qui est une sous-bibliothèques de numpy)
+                Exemple:
+                <code class = "language-python">
+                    import matplotlib.pyplot 
+                    import numpy.linalg 
+                    import numpy.random 
+                </code>
+
+
+                On peut aussi attribuer un "alias" à la bibiliothèque qu'on importe 
+                pour perdre moins de temps à écrire le nom de la bibiliothèque quand
+                on l'utilise.
+                
+                Pour cela on ajoute "as un_alias_choisi" derrière le nom_de_la_bibiliothèque
+                qu'on importe 
+
+                Par exemple:
+                <code class = "language-python">
+                    import numpy as np 
+                    a = np.array([[1,0], [0,1]])
+                </code>
+
+                On peut aussi donner à un alias à une sous-bibliothèque:
+                <code class = "language-python">
+                    import numpy.random as rd 
+                    a = rd.randint(0, 10)
+                    print(a)
+                </code>
+
+                Les alias classiques sont:
+                    - al pour numpy.linalg 
+                    - plt pour matplotlib.pyplot 
+                    - rd pour numpy.random 
+                    - np pour numpy 
+                    - pd pour pandas 
+                
+            </pre>
+        </div>
+        <h3>
+            2. from ... import ...
+        </h3>
+        <div class = "bruh">
+        <pre class = "explication">
+            On peut aussi chercher à importer seulement des éléments spécifiques
+            d'une bibliothèque/sous-bibliothèque
+            On écrit alors: 
+            <code class = "language-python">
+                from nom_de_la_bibiliothèque import nom_de_element
+                # Ex:
+                from numpy import pi 
+                from numpy import array
+            </code>
+            On peut importer plusieurs élements en même-temps en mettant des virgules:
+            <code class = "language-python">
+                from nom_de_la_bibiliothèque import element_1, element_2
+                # Ex:
+                from numpy import pi, e, array
+            </code>
+            Lorsqu'on importe des elements directement on a pas besoin de préciser 
+            de quelles bibiliothèque/sous-bibli elles viennent quand on les utilise
+            <code class = "language-python">
+                from numpy import array
+                a = array([[1,0],[0,1]])
+                # On a pas besoin de mettre numpy.array dans ce cas.
+                print(type(a))
+            </code>
+            Alors que d'habitude on aurait: 
+            <code class = "language-python">
+                # on ne précise pas ce qu'on importe, on dit juste d'utiliser la bibiliothèque
+                import numpy 
+                # on doit donc préciser de quelle librairie vient array
+                a = numpy.array([[1,0],[0,1]]) 
+                print(type(a))
+            </code>
+            On peut aussi importer TOUT ce qu'il y a dans une bibiliothèque 
+            Pour cela on dit qu'on importe " * " (l'étoile signifiant tout)
+            <code class="language-python">
+                from numpy import * 
+                # On a pas besoin de dire que array vient de numpy
+                # vu que * est équivalent à manuellement importer tout explicitement
+                a = array([[1,0],[0,1]]) 
+                print(type(a))
+            </code> 
+        </pre>
+    </div>
+        <div id= "returntomenu">
+            <a href = '../index.html'>
+                Retour au menu 
+            </a>
+        </div>
+    <script src="../script.js"></script>
+    </body>
+</html>

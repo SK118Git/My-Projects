@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang = "fra">
+    <head>
+        <title> Les VARAD dans Python</title>
+        <link rel = "stylesheet" href = "style.css">
+        <meta charset = "UTF-8">
+        <meta http-equiv="Content-type" content = "text/html; charset=UTF-8">
+    </head>
+    <h1>
+        Les VARAD dans Python
+    </h1>
+    <div>
+        <p>
+            En général on peut simuler une VARAD de 2 manières différentes:
+            <br>    - utiliser directement la fonction appropriée apparentant à la bibliothèque numpy.random
+            <br>    - construire une fonction qui calcule la densité pour simuler nous-même la VARAD
+        </p>
+    </div>
+    <h3> 
+        Importons les bibiliothèques dont on aura besoin
+    </h3>
+    <div class = "bruh">
+        <pre>
+            <code class="language-python">
+import numpy as np
+import numpy.random as rd
+import matplotlib.pyplot as plt
+            </code>
+        </pre>
+    </div>
+    <h3> 
+        Faisons la représentation graphique d'une <a id= "norm_graph">normale centrée réduite</a>:
+    </h3>
+    <div class = "bruh">
+        <pre>
+            <code class="language-python">
+    
+            #En utilisant la bibliothèque numpy.random:
+mu, sigma = 0, 1 # espérance et écart-type
+simul = rd.normal(mu, sigma, 10000) # Fait une liste avec le résultat de 10000 normales
+plt.hist(simul, 100, density=True) # fait un histogramme d'une densité de probabiloté, le 100 permet de modifier la précision je crois
+
+
+            #En faisant tout soi-même:
+def normale(m, sigma, x): #on construit nous-même la densité de probabilité 
+    return 1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (x - m)**2 / (2 * sigma**2) )
+# on peut utiliser cette fonction pour simuler nous-même la loi  et ne pas dépendre de np.random 
+
+x = np.arange(-5, 5, 0.001) # l'axe des abscisses 
+plt.plot(x, normale(mu, sigma, x)) # on peut dessiner manuellement la courbe 
+
+
+plt.show() #affiche l'histogramme et la courbe 
+            </code>
+        </pre>
+    </div>
+
+    <h3> 
+        Faisons de même pour une exponentielle:
+    </h3>
+    <div class = "bruh">
+        <pre>
+            <code class="language-python">
+           
+            # Avec les fonctions données dans numpy.random:
+
+l = 1 # Attention!! "lambda" est un mot-clef déjà utilisé par Python pour un certain type de fonction donc on ne peut pas nommer une variable "lambda"
+simul = rd.exponential(l, 10000) 
+plt.hist(simul, 100, density=True)
+
+            # Et si on le fait nous-même
+
+def expo(λ, x):
+    return λ*np.exp(-λ*x)
+
+x = np.arange(0, 5, 0.01) # l'axe des abscisses 
+plt.plot(x, expo(l, x)) 
+
+plt.show()
+            </code>
+        </pre>
+    </div>
+
+    <body>
+        <div id= "returntomenu">
+            <a href = 'index.html'>
+                Retour au menu 
+            </a>
+        </div>
+    <script src="script.js"></script>
+    </body>
+</html>
+
+

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang = "fra">
+    <head>
+        <title> Les fonctions dans Python</title>
+        <link rel = "stylesheet" href = "style.css">
+        <meta charset = "UTF-8">
+        <meta http-equiv="Content-type" content = "text/html; charset=UTF-8">
+    </head>
+    <body>
+
+    <h3>
+        Une fonction peut être décomposée en 3 morceaux:
+    </h3>
+
+    <h3>
+        1. La définition de la fonction
+    </h3>
+    <div class = "bruh" id = "def_f">
+        <pre class = "explication" style = "text-align: left;">
+            - Une fonction est définie par son nom, et les paramètres qu'elle prend.
+
+            - Une fonction peut nombre n'importe quel nombre de paramètres, tant qu'ils 
+              sont tous annoncés dans la définition de la fonction
+
+            - On peut donner à certains paramètres des valeurs par défaut en écrivant =val 
+              juste après le nom du paramètre. Avec "val" la valeur de défaut de cette paramètre 
+
+            - <b>TOUTS</b> les paramètres annocés dans la définition de la fonction doivent
+              être ensuite mis lorsqu'on appelle la fonction
+              <b>SAUF: </b> les paramètres qui ont des valeurs par défaut, qui prendront donc 
+              cette valeur par défaut 
+
+            - L'ordre dans lequel on définit les paramètres <b> DOIT ETRE</b> le même ordre 
+              que l'ordre dans leuqel on précise la valeur des paramètres lorsque on appelle 
+              la fonction.
+
+            - Plus avancé, et probablement à ignorer (j'ai seulement réalisé ceci grâce à Basile
+              et dans le cadre d'un truc particuleir):
+                    Une fonction ne peut pas prendre en compte les variables qui sont définies
+                    à l'extérieur de celle-ci. Toutes les variables qu'on souhaite utiliser dans la 
+                    fonction doivent être annoncés dans la définition de la fonction.
+                    <b>SAUF</b>: les variables dont la valeure n'est jamais modifiée dans le programme (ex:
+                    les nombre_de_simulations qu'on peut définir au début du programme et qu'on ne 
+                    modifie jamais)
+            
+            Exemple d'une définition d'une fonction:
+            <code class = "language-python">
+        def nom_de_la_fonction(paramètre_1, paramètre_2 = 3):
+            ...
+            return ...
+            </code>
+            - Cette fonction se nomme "nom_de_la_fonction"
+            - elle prend deux paramètres: "paramètre_1" et "paramètre_2"
+            - paramètre_2 a pour valeur de défaut 3
+
+            Quand on appellera cette fonction il faudra ensuite préciser au moins paramètre 1:
+            <code class = "language-python">
+        x = nom_de_la_fonction(5) 
+            </code>
+            Python comprendra que:
+                - paramètre_1 = 5
+                - paramètre_2 = 3
+
+            Un autre cas:
+            <code class = "language-python">
+        y = nom_de_la_fonction(7, 10)
+            </code>
+            Python comprendra que:
+            - paramètre_1 = 7
+            - paramètre_2 = 10
+
+            Si on veut préciser la valeur des paramètres dans l'ordre qu'on veut:
+            <code class= "language-python">
+        z = nom_de_la_fonction(paramètre_2 = 15, paramètre_1 = 3)
+            </code>
+            Python comprendra que:
+            - paramètre_1 = 15
+            - paramètre_2 = 3
+
+        </pre>
+    </div>
+
+
+    <h3>
+        2. Le script
+    </h3>
+    <div class = "bruh" id = "script_f">
+        <pre class = "explication" style = "text-align: left;">
+            C'est ici qu'on met toutes les instructions que doit executer le programme.
+            Dans le scripte les seules variables qui sont accessibles sont celles qui ont 
+            été définies comme paramètres (dont on précise les valeurs lorsque on utilise)
+            la fonction.  
+        </pre>
+    </div>
+
+
+    <h3> 
+        3. Le "return statement"
+    </h3>
+    <div class = "bruh" id = "return_f">
+        <pre class = "explication" style = "text-align: left;">
+            Pour proprement finir la définition de notre fonction, 
+            il faut qu'on ajoute un "return" à la fin de la fonction.
+            On met derrière le "return" ce qu'on veut que la fonction 
+            donne comme résultat.
+
+            - On peut mettre rien derrière un "return"
+
+
+            Par Exemple: 
+        </pre>
+        <pre>
+              <code class = "language-python">
+def f(l):
+    x = l.pop() # prend et retire le dernier élément d'une liste
+    print("l'élement qui a été retiré est = ", x)
+    return 
+liste = [1, 2, 3]
+f(liste)
+print("Après avoir retiré l'élement la liste vaut = ", liste)
+              </code>
+        </pre>
+        
+        <pre class = "explication" style = "text-align: left;">
+            - On peut mettre une variable derrière un "return" 
+
+
+            Par Exemple:
+        </pre>
+
+        <pre>
+                <code class = "language-python">
+def f(x, y):
+    resultat = x + y
+    return resultat
+print("le resultat de la fonction est = ", f(2, 3))
+                </code>
+        </pre>    
+        <pre class = "explication" style = "text-align: left;">
+            - On peut mettre une valeure (non-variable) derrière un "return". 
+              Dans ce cas, le return peut permettre de s'assurer que la fonction
+              a fonctionné sans problèmes si elle rend bien la valeure prédifinie.
+
+
+            Par Exemple:
+        </pre>
+        <pre>    
+                <code class = "language-python">
+def f(x):
+    print(x)
+    return True
+
+fonction_résussie = f(5)
+if fonction_résussie == True:
+    print("La fonction a executé sans problèmes")
+else:
+    print("La fonction a eu un problème...")
+
+                </code>
+        </pre>
+        <pre class = "explication" style = "text-align: left;">
+            - On peut mettre plusieurs variables (même de types différents)
+              derrière le return. Dans ce cas la fonction renvoie un "tuple" 
+              contenant ces valeurs. 
+              Un tuple est très similaire à une liste, mais il y a moins de 
+              méthodes définies sur les "tuple". 
+
+
+            Par Exemple:
+        </pre>
+        <pre>
+                <code class = "language-python">
+def f(x):
+    y = x + 1
+    texte = str(x) # x sous forme de string 
+    return y, texte
+print("le tuple entier vaut= ", f(5))
+print("la premiere valeur du tuple est = ", f(5)[0])
+print("la deuxieme valeur du tuple est = ", f(5)[1])
+                </code>
+        </pre>
+    </div>
+
+
+        <div id= "returntomenu">
+            <a href = 'index.html'>
+                Retour au menu 
+            </a>
+        </div>
+    <script src="script.js"></script>
+    </body>
+</html>

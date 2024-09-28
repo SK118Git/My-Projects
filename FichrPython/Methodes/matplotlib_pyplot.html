@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang = "fra">
+    <head>
+        <title> Matplotlib dans Python</title>
+        <link rel = "stylesheet" href = "../style.css">
+        <meta charset = "UTF-8">
+        <meta http-equiv="Content-type" content = "text/html; charset=UTF-8">
+    </head>
+    <body>
+        <div class = "bruh">
+            <pre class = "explication">
+            Méthodes à connaitre sur matplotlib.pyplot:
+                1. plot 
+                2. hist 
+                3. bar 
+                4. boxplot
+                5. scatter 
+                6. show 
+            </pre>
+        </div>
+        <h3>
+            0. Les bases:
+        </h3>
+        <div class ="bruh">
+            <pre class ="explication">
+                Pour faire des représentations graphiques sur python, on
+                utilise la <a href = "bibliotheques.html#sous_lib" style = "color:blue">sous-bibliothèque</a> pyplot, appartenant à matplotlib
+                
+                Pour effectuer la représentation graphique il faut d'abord tracer
+                le graphique en appelant plot, hist, bar, etc.
+                Puis il faut utiliser show pour dire à l'ordinateur de montrer le 
+                graphique qui a été tracé. 
+                
+                Remarque:
+                Certaines applis font apparaitre le graphique automatiquement sans avoir
+                besoin d'utiliser show.
+                Mais c'est toujours mieux de mettre show  
+            </pre>
+        </div>
+        <h3>
+            Pendant le reste de cette page on considère qu'on a écrit l'instruction 
+            d'importer matplotlib.pyplot au début de notre fichier python sous l'alias plt
+        </h3>
+        <h3> 
+            1. plot 
+        </h3>
+        <div class = "bruh">
+            <pre class="explication">
+                La fonction plot prend plusieurs arguments:
+                    - l'axe des absicesses:
+                        Ce paramètre est optionnel, sa valeur par défaut 
+                        est un numpy.array calculé automatiquement par:
+                        range(len(y))
+                        Si on précise une valeure pour x il faut que la taille 
+                        de x soit la même que celle de y (surtout si les deux 
+                        sont des listes/numpy.array)
+                        Par exemple:
+                        <code class = "language-python">
+                        x = [1, 2, 3, 4, 5] 
+                        y = [1, 4, 9, 16, 25] 
+                        plt.plot(x, y)
+                        plt.show()
+                        </code>
+
+                        Ou encore:
+                        <code class= "language-python">
+                        x = [k for k in range(1, 6)]
+                        y = [k**2 for k in x]
+                        plt.plot(x, y)
+                        plt.show()
+                        </code>
+
+                    - l'axe des ordonnées:
+                        Ce paramètre est le seul qui est absolument nécessaire
+                        y doit correspondre à une liste ou un numpy.array d'éléments 
+                        Par exemple:
+                        <code class = "language-python">
+                        y = [1, 4, 9, 16, 25]
+                        plt.plot(y)
+                        # x est automatiquement compris comme étant [1, 2, 3, 4, 5]
+                        plt.show()
+                        </code>
+
+                        Remarque:
+                        <code class = "language-python">
+                        def f(x):
+                            return x**2
+                        abs = numpy.arange(-5, 5, 0.01)
+                        plt.plot(abs, f(abs))
+                        plt.show()
+                        </code>
+                        Ce code fonctionne parceque f(abs) renvoit en réalité un numpy.array 
+                        parce qu'appliquer une fonction à un numpy.array renvoie un array de même 
+                        taille contenant l'image de tous les éléments du numpy.array 
+                        Ce genre de comportement NE FONCTIONNE PAS sur des listes 
+
+                    - les détails de représentation:
+                        Ce paramètre est optionnel, et tous les sous-paramètres (color, marker, etc.)
+                        sont optionnels aussi. Donc on peut juste préciser une valeure pour un d'entre eux.
+                        Il y a deux manières de préciser ces détails. 
+                        - Soit on écrit explicitement comment on veut paramètrer 
+                            ces détails en précisant des valeurs pour:
+                                - color
+                                - marker (à quoi ressemble les points)
+                                - markersize (l'épaisseur des points)
+                                - linestyle (à quoi ressemble les lignes qui relient les points)
+                                - linewidth (l'épaisseur des lignes)
+                            Par exemple: 
+                            <code class="language-python">
+                        x = [1, 2, 3, 4, 5]
+                        y = [k**2 for k in x]
+                        plt.plot(x, y, color='green', marker='o', linestyle='dashed', linewidth=2, markersize=12)
+                        plt.show()
+                            </code>
+                        - Soit on écrit sous forme abrégé en mettant dans l'ordre qui suit:
+                            1. la couleure (en mettant la première lettre)
+                            2. le marker (avec le symbole voulu)
+                            3. le linestyle (avec le symbole voulu)
+                          Remarque:
+                          Tous les autres paramètres (markersize, linewidth) ne peuvent pas être abrégés, il
+                          faut préciser leur valeur explicitemement si on souhaite mettre des valeurs particulières.
+                          Par exemple:
+                          <code class = "language-python">
+                        x = [1, 2, 3, 4, 5]
+                        y = [k**2 for k in x]
+                        plt.plot(x, y, 'go--', linewidth=2, markersize=12)
+                        # On aura exactement la même chose qu'a l'exemple précédent
+                        plt.show()
+                          </code> 
+
+                Plot peut aussi représenter des données (qui viendraient
+                de l'analyse d'une banque de données par pandas par exemple):
+                Alors les arguments que prend plot sont:
+                    - le nom de l'axe des abscisses
+                    - le nom de l'axe des ordonnées 
+                Ce cas me parait HPO 
+                Exemple:
+                <code class = "language-python">
+
+        # importing pandas library 
+        import pandas as pd 
+        # importing matplotlib library 
+        import matplotlib.pyplot as plt 
+        
+        # creating dataframe 
+        df = pd.DataFrame({ 
+            'Name': ['John', 'Sammy', 'Joe'], 
+            'Age': [45, 38, 90] 
+        }) 
+        
+        # plotting a bar graph 
+        df.plot(x="Name", y="Age", kind="bar") 
+
+                </code>
+            </pre> 
+        </div>
+
+
+        <h3>
+            2. Hist
+        </h3>
+        <div class = "bruh">
+            <pre class = "explication">
+                J'ai essayé de lire la documentation officiel et j'ai rien capté ni réussi à faire 
+                fonctionner 
+            </pre>
+        </div>
+
+
+        <h3>
+            3. Bar
+        </h3>
+        <div class = "bruh">
+            <pre class = "explication">
+                La fonction bar prend plusieurs paramètres:
+                    - x (l'axe des abscisses, ce paramètre est nécessaire)
+                    - height (la hauteur de chaque élement de x, ce paramètre est nécessaire)
+                    - width (l'épaisseur des barres)
+                    - color (la couleur des barres)
+                    - tick_label (le nom des barres)
+            Par exemple (<a href = "../vad.html#bin_graph" style = "color:blue"> J'ai repris ce qu'on a fait sur les binomiales </a>)
+
+            <code class = "language-python">
+
+        n = 20
+        p = 0.5
+        nombre_de_simulations = 10000
+
+        simulations = rd.binomial(n, p, nombre_de_simulations) 
+
+
+        abs = [k for k in range(n+1)]
+        ord = []
+        for k in abs:
+            n = list(simulations).count(k)/nombre_de_simulations
+            ord.append(n)
+
+        plt.bar(x=abs, height=ord, width=0.5, tick_label = [str(k) for k in abs], color = 'red')
+        plt.show()
+            </code>
+        </pre>
+        </div>
+
+
+        <h3>
+            4. Boxplot
+        </h3>
+        <div class = "bruh">
+            <pre class = "explication">
+                Boxplot prend plusieurs paramètres:
+                    - x:
+                        Les données à analyser, on peut aussi donner une 
+                        liste/numpy.array de données, ce qui donnera un 
+                        nombre équivalent de boites 
+                        <b>C'est le seul paramètre nécessaire</b>
+
+                    - notch:
+                        Un booléen (True/False) qui décide de la forme de la boite
+
+                    - sym:
+                        Détermine comment représenter les points flottants,
+                        suit la même syntaxe que pour plot
+
+                    - vert:
+                        Un booléen, si True aligne les boites verticalement,
+                        si False aligne les boites horizontalement
+
+                    - widths:
+                        L'épaisseur des boites
+
+                    - patch-artist:
+                        Un booléen, si True colorie les boites
+
+                    - labels:
+                        Le nom des boites (donc il faurt donner une 
+                        liste/un numpy.array avec autant de noms qu'il
+                        y aura de boites) 
+
+                    Un exemple minimaliste (on reprend <a href = "../varad.html#norm_graph" style = "color:blue">nos lois normales</a>):
+                    <code class = "language-python">
+        esperance = 0
+        nombre_de_simulations = 1000
+        nom_des_boites = ['ecart_type de 1', 'ecart_type de 2', 'ecart_type de 3']
+
+        simulations = []
+        for ecart_type in range(1, 4):
+            simulations.append(rd.normal(esperance, ecart_type, nombre_de_simulations))
+
+
+        plt.boxplot(simulations) 
+                        
+        plt.show()
+                    </code>
+
+                    Un exemple avec tout:
+                    <code class = "language-python">
+        esperance = 0
+        nombre_de_simulations = 1000
+        nom_des_boites = ['ecart_type de 1', 'ecart_type de 2', 'ecart_type de 3']
+
+        simulations = []
+        for ecart_type in range(1, 4):
+            simulations.append(rd.normal(esperance, ecart_type, nombre_de_simulations))
+
+
+        plt.boxplot(simulations, 
+                    sym = 'b*', # Meme syntaxe que pour les paramètres de plot abrégés
+                    notch = False, # La forme des boites
+                    vert=True,  # boites alignées à la verticale, mettre False pour avoir horizontaux
+                    widths = 0.8, # L'épaisseur des boites
+                    patch_artist=True,  # Colorie les boites 
+                    labels=nom_des_boites)  # donne le nom aux boites 
+                        
+        plt.show()
+                    </code>
+            </pre>
+        </div>
+
+        <h3>
+            5. Scatter
+        </h3>
+        <div class = "bruh">
+            <pre class = "explication">
+                Le fonction scatter prend plusieurs paramètres:
+                    - x:
+                        Paramètre NECESSAIRE
+                        L'axe des abscisses
+
+                    - y:
+                        Paramètre NECESSAIRE
+                        Les valeurs images
+
+                    - s:
+                        Paramètre optionnel
+                        La taille des points
+
+                    - c:    
+                        Paramètre optionnel
+                        Correspond à la couleur des points 
+                        Il faut soit mettre une seule valeure, soit 
+                        autant de valeurs qu'il y a de points 
+
+                    - marker:
+                        Paramètre optionnel 
+                        Correspond à la forme des points
+                        Mêmes options que pour plot 
+                    
+                    Un exemple minimaliste:
+                    <code class = "language-python">
+                def f(x):
+                    return x**2
+                    
+                ord = [k for k in range(9)]
+                abs = [f(k) for k in ord]
+                plt.scatter(ord, abs)     
+                plt.show()
+                    
+                    </code>
+
+                    Un exemple complet:
+                    <code class = "language-python">
+                def f(x):
+                    return x**2
+                    
+                ord = [k for k in range(9)]
+                abs = [f(k) for k in ord]
+                plt.scatter(x=ord, 
+                            y=abs, 
+                            s=10, 
+                            # On crée une liste qui répète 3 fois 
+                            # le pattern rouge, bleu, vert car il 
+                            # y a 9 valeurs dans l'axe des abscisses
+                            c= 3*['red', 'blue', 'green'], 
+                            marker ='*')     
+                plt.show()
+                    
+                    </code>
+
+            </pre>
+        </div>
+
+        <h3>
+            6. Plot
+        </h3>
+        <div class = "bruh">
+            <pre class = "explication">
+                Pour pouvoir afficher nos graphiques il suffit d'appeler 
+                la fonction plot()
+                plot ne prend aucun arguments.
+            </pre>
+        </div>
+
+        <div id= "returntomenu">
+            <a href = '../index.html'>
+                Retour au menu 
+            </a>
+        </div>
+    <script src="../script.js"></script>
+    </body>
+</html>

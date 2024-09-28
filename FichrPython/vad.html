@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang = "fra">
+    <head>
+        <title> Les VAD dans Python</title>
+        <link rel = "stylesheet" href = "style.css">
+        <meta charset = "UTF-8">
+        <meta http-equiv="Content-type" content = "text/html; charset=UTF-8">
+    </head>
+    <body>
+    <h3>
+        Comment simuler (et représenter graphiquement) une VA discrète?
+    </h3>
+    <br>
+
+    <h3> 
+        Importons les bibiliothèques dont on aura besoin:
+    </h3>
+    <div class = "bruh">
+        <pre>
+            <code class="language-python">
+import numpy as np
+import numpy.random as rd
+import matplotlib.pyplot as plt
+            </code>
+        </pre>
+    </div>
+
+    <h3>
+        I. Une Uniforme:
+    </h3>
+    <div class = "bruh">
+    <pre>
+        <code class="language-python">
+borne_inf = 0 # borne inférieure de l'uniforme
+borne_sup = 10 # borne supérieure de l'uniforme
+nombre_experiences = 10
+            
+# La bibliothèque numpy.random nous donne la fonction suivante:
+
+X = rd.randint(borne_inf, borne_sup, nombre_experiences) 
+            
+# Cette fonction renvoie un numpy.array remplis de "nombre_experiences" uniformes discrètes sur [a, b[ (b exclus) 
+# Si on ne précise pas nombre_experiences alors par défaut python comprendera que nombre_experiences=1
+# Si on met seulement b alors par défaut python comprendera que a = 0 
+# et nombre_experiences = 1 et renvoie juste un entier
+
+        </code>
+    </pre>
+    </div>
+    <h3>
+        Faisons le nous-même!
+    </h3>
+    <h3>
+        Commençons par un exemple:
+    </h3>
+    <div class = "bruh">
+        <pre class = "explication">
+            On va chercher à simuler une uniforme avec seulement la fonction de proba la plus basique: rd.random()
+            rd.random() simule une unniforme à densité sur [0,1]
+            Donc on va découper [0, 1] en plusieurs intervalles, 
+            Et on considera que le résultat de l'expérience dépend de l'intervalle dans laquelle tombe rd.random()
+            
+            L'exemple le plus parlant est avec une uniforme sur 3 valeurs (comme [4, 5, 6])
+            On découpe donc l'intervalle en 1/3, 2/3 et 3/3 
+            si 0/3 < rd.random() < 1/3 alors on renvoit 4
+            si 1/3< rd.random() 2/3 alors on renvoit 5
+            si 2/3< rd.random() < 3/3 alors on renvoit 6
+        </pre>
+    </div>
+    <h3>
+        Ecrivons cela en python:
+    </h3>
+    <div class = "bruh"> 
+    <pre>
+        <code class = "language-python">
+
+nexp = 1000 # le nombre d'experiences
+resultats = [] # on intialise la liste qui contiendra tous les résultats
+for k in range(nexp):
+    p = rd.random()
+    if 0/3 < p < 1/3:
+        resultats.append(4) 
+    elif 1/3< p < 2/3:
+        resultats.append(5)
+    elif 2/3< p < 3/3:
+        resultats.append(6)
+
+        # Verifions que tout fonctionne!
+
+abs = [4, 5, 6] 
+ord = []
+
+# resultats est une liste avec juste les résultats à l'état brut, 
+# il faut donc compter le nombre de fois qu'apparait 4, 5, 6 dans résultats
+for k in abs:
+    n = resultats.count(k)/nexp
+    ord.append(n)
+plt.bar(abs, ord)
+plt.show()
+        </code>
+    </pre>
+    </div>
+    
+    <h3>Passons au cas général</h3>
+    <div class = "bruh" id ="mon_uniforme">
+        <pre>
+            <code class="language-python">
+
+def uniforme_discret(a, b, nombre_experiences):
+    resultats_des_experiences = [] # on initialise la liste qui contiendra nos résultats
+
+    # une liste contenant tous les termes que pourra renvoyer notre vad uniforme
+    termes = [k for k in range(a, b)] 
+
+    nombre_de_termes = len(termes)
+    for k in range(nombre_experiences): # on répète l'expérience nombre_experiences fois 
+        
+        # Ici je vais faire ce calcul avec une loop for mais si on connaissais déjà les valeurs de a et b 
+        # on aurait pu manuellement faire le découpage de l'intervalle [0,1] et juste avoir une sucession 
+        # de elif comme je l'ai fait dans l'exemple plus haut
+         
+        # Ceci correspond à la logique et la manière de découper la fonction que j'ai présenté dans l'exemple
+        for j in range(0, nombre_de_termes):
+            if j/nombre_de_termes < rd.random() < (j+1)/nombre_de_termes: 
+                resultats_des_experiences.append(termes[j]) 
+                
+    return resultats_des_experiences
+
+                # Vérifions que tout fonctionne!
+
+a = 2
+b = 7
+nombre_exp = 10000
+abscisses = [k for k in range(a, b)]
+
+# Ici et seulement ici, j'ai défini mon axe des ordonnées en 1 ligne en décrivant une liste
+# en compréhension pour donner une idée d'à quoi ça ressemble, mais dans le
+# reste des cas je l'ai écrit plus clairement sur 3-4 lignes
+
+ordonnes = [uniforme_discret(a, b, nombre_exp).count(k)/nombre_exp for k in range(a, b)]
+plt.bar(abscisses, ordonnes)
+plt.show()
+            </code>
+        </pre>
+    </div>
+
+        </code>
+    </pre>
+    </div>
+
+    <h3>
+        II. Une Bernouilli:
+    </h3>
+    <div class = "bruh">
+    <pre>
+        <code class="language-python">
+
+            # Une bernouilli est vraiment très simple à simuler:
+            # On va utiliser rd.random() qui simule une uniforme à densité sur [0,1] (que je note U)
+def bernouilli(p):
+    X = 0
+    if rd.random() < p: #En effet, P(U < p)  = P(U<= p) = p
+        X = 1
+
+    # Vu que l'évenement précédent est réalisé avec probabilté de p, celui-ci est réalisé avec proba de 1-p
+    else: 
+        X = 0
+    return X
+
+            # Et c'est tout!
+
+        </code>
+    </pre>
+    </div>
+
+    <h3>
+        III. <a  id = "bin_graph"> Une Binomiale</a>:
+    </h3>
+    <div class = "bruh">
+    <pre>
+        <code class="language-python">
+            # numpy.random a déjà une fonction qui simule une binomiale:
+# (Par Exemple:)
+n = 20
+p = 0.5
+nombre_de_simulations = 100
+
+# rd.binomial va créer un numpy.array avec nombre_de_simulations simulations 
+# différentes d'une binomiale de paramètre (n, p)
+# par défaut, si on met seulement n et p comme paramètres, python comprendra 
+# que nombre_de_simulations = 1 et renvoie juste un entier
+
+simulations = rd.binomial(n, p, nombre_de_simulations) 
+
+            # Regardons ce que nous donne la représentation graphique:
+
+abs = [k for k in range(n+1)]
+ord = []
+for k in abs:
+# Attention! ici il faut transformer simulations en liste pour pouvoir utiliser la méthode .count()
+    n = list(simulations).count(k)/nombre_de_simulations
+    ord.append(n)
+plt.bar(abs, ord)
+plt.show()
+
+
+        </code>
+    </pre>
+    </div>
+    <h3>
+        Et si nous le faisions nous-même?
+    </h3>
+    <div class = "bruh">
+        <pre>
+            <code class = "language-python">
+# Rappel du cours: une binomiale peut être comprise comme la somme de n bernouillis indépendantes
+# et de même paramètre p 
+# donc en reprenant ce qu'on avait écrit pour notre bernouilli on a:
+
+def binomiale(n, p, nombre_de_simulations):
+    resultats = [] # on intialise la liste qui contiendra les résultats
+    for j in range(nombre_de_simulations): # On répète nombre_de_simulations fois une binomiale
+        X = 0
+        # on va réaliser une bernouilli n fois et compter le nombre de fois qu'on a eu des succès sur ces n fois
+        for k in range(n): 
+            if rd.random() < p: 
+            # Attention on écrit X = X + 1 et non X = 1 vu qu'on veut savoir combien il y a eu de succès en tout
+                X = X + 1 
+            # Remarque: ce else et le X= X + 0 ne servent à rien et peuvent être retirés, mais plus claire 
+            else: 
+                X = X + 0
+        resultats.append(X)
+    return resultats
+
+        # Testons par exemple...
+n = 20
+p = 0.5
+nombre_de_simulations = 10000
+resultats = binomiale(n, p, nombre_de_simulations)
+abs = [k for k in range(n+1)]
+ord = []
+for k in abs:
+# Remarque: on a pas besoin de transformer résultats en liste vu que c'en est déjà une
+    n = resultats.count(k)/nombre_de_simulations 
+    ord.append(n)
+plt.bar(abs, ord)
+plt.show()
+
+            </code>
+        </pre>
+    </div>
+
+    <h3>
+        IV. Une Géométrique
+    </h3>
+    <div class = "bruh">
+    <pre>
+        <code class="language-python">
+            
+    # Regardons la fonction que nous donne numpy.random
+
+# (Les valeurs de p et nombre_de_simulations sont prises juste pour donner un exemple)
+p = 0.5
+nombre_de_simulations = 10000
+
+
+# rd.geomtric(p, nombre_de_simulations) nous donnera un numpy.array qui contient
+# nombre_de_simulations de résultats de la simualtion d'une géométrique de paramètre p 
+# Encore une fois si on précise pas nombre_de_simulations alors python comprend 
+# nombre_de_simulations = 1 et renvoie juste un entier
+simulations = rd.geometric(p, nombre_de_simulations)
+
+
+    # Regardons la représentation graphique:
+
+# Ici j'ai limité l'axe des abscisses à 10 vu que la géométrique p =0.5 dépasse difficilement 10
+# Mais techniquement l'univers d'une géométrique est N*
+abs = [k for k in range(1, 10)] # on commence les abscisses à 1 vu que Omega(Géométrique) = N*
+ord = []
+for k in abs:
+# Simulations est un numpy.array donc il faut le transformer en liste pour utiliser .count()
+    n = list(simulations).count(k)/nombre_de_simulations
+    ord.append(n)
+plt.bar(abs, ord)
+plt.show()
+        </code>
+    </pre>
+    </div>
+    <h3>
+        A notre tour!
+    </h3>
+    <div class = "bruh">
+        <pre>
+            <code class = "language-python">
+                # Je propose une approche très naïve, qui est peut-être inefficace 
+                # Mais a le mérite d'être très claire
+                
+def geometrique(p, nombre_de_simuls):
+    resultat = [] # initialisation de la liste qui contiendra les résultats
+    for j in range(nombre_de_simuls): # on simule nombre_de_simuls fois notre géométrique
+        succes = False 
+        k = 0 # on compte le "temps" (pas le bon terme) qu'il a fallu avant d'avoir un succès 
+        while succes == False: # tant qu'on a toujours pas eu un succès
+            k = k + 1
+            if rd.random() < p: # (le succès est bien de probabilité p)
+                X = k # on regarde combien de "temps" (pas le bon terme) il a fallu pour avoir un succès
+                succes = True # on dit qu'on a eu un succès, nous permettant de sortir de la boucle
+        resultat.append(X)
+    return resultat
+        
+
+        # Verifions la représentation graphique:
+
+# Ces valeurs servent encore juste à titre d'exemple
+p = 0.5
+nombre_de_simulations = 10000
+simulations = geometrique(p, nombre_de_simulations)
+
+    
+abs = [k for k in range(1,10)]
+ord = []
+for k in abs:
+# Notre version de la simulation de la loi géo renvoie déjà une liste donc pas besoin de la convertir en liste
+    n = simulations.count(k)/nombre_de_simulations
+    ord.append(n)
+plt.bar(abs, ord)
+plt.show()
+            </code>
+        </pre>
+    </div>
+
+    <h3>
+        V. Une Poissonnienne
+    </h3>
+    <div class = "bruh">
+    <pre>
+        <code class="language-python">
+            # J'en ai marre d'écrire la même chose en boucle, comem vous le voyez la syntaxe reste la même
+            # pour toutes ces fonctions venant de numpy.random
+
+# Attention "lambda" est un nom qui est déjà reservé pas python pour autre chose, 
+# donc impossible de nommer une variable "lambda"
+l = 5 
+nombre_de_simulations = 10000
+
+
+# Encore la même chose: l correspond au paramètre lambda d'une poissonienne, 
+# nombre_de_simulations au nombre de simulations qu'il réalisera
+# et qu'il mettera sous forme de numpy.array
+# et si on précise pas nombre_de_simulations alors python comprendera nombre_de_simulations = 1 
+# et renvoit juste un entier
+
+simulations = rd.poisson(l, nombre_de_simulations)
+    
+# j'ai pris 20 comme limite de l'axe des absicesses mais techinquement on pourrait mettre 10000
+abs = [k for k in range(20)] 
+ord = []
+for k in abs:
+# simulations est un numpy.array donc faut le transformer en liste pour utiliser .count()
+    n = list(simulations).count(k)/nombre_de_simulations
+    ord.append(n)
+plt.bar(abs, ord)
+plt.show()
+        </code>
+    </pre>
+    </div>
+    <h3>
+        Allez zou!
+    </h3>
+    <div>
+        <pre class = "explication">
+
+        Depuis le début j'ai fait de mon mieux pour donner des fonctions permettant de simuler
+        les probas aléatoires qui sont construites sans avoir recours à juste l'expression de P(X=k)
+        En effet dans le cas de VA discrètes quelconques, dont on ne connait pas la loi mais dont on connai l'expérience
+        La manière de réfléchir et programmer que j'ai présenté jusqu'ici est la meilleure méthode.
+        Mais pour la poissonnienne je m'avoue vaincu! Jsp comment je la simulerais sans avoir recours à l'expression de P(X=k)
+        
+        <u> Jusqu'ici on simulait bien des VA, donc on obtenait des résultats qui relevaient de l'experience pratique</u>
+        <u> et qui pouvaient donc s'éloigner du résultat théorique. </u>
+        <u> Malheureusement, ici, on devra se contenter d'une représentation théorique </u>
+        
+        </pre>
+    </div>
+    <div class = bruh>
+        <pre>
+            <code class = "language-python">
+
+def poisson(λ, k):
+    return (λ**k) * (np.exp(-λ)) * (1/np.math.factorial(k))
+        
+        # Verifions la représentation graphique:
+
+l = 5 # une valeur de lambda choisi aléatoirement pour l'exemple
+abs = [k for k in range(0,20)] # on crée l'axe des abscisses
+
+# Ici on caclule l'axe des ordonnées différement qu'avant
+# EN effet jusqu'ici on effectuait nombre_de_simulations simulations de notre loi
+# puis on comptait le nombre de fois qu'on obtenait chaque résultat possible
+# Vu qu'on travail avec l'expression de P(X=k) on a juste à calculer P(X=k) pour tout k appartenant à 
+# X(Omega) (mais ici on s'est contenté de s'arrêter à 20)
+ord = [poisson(l, k) for k in abs] 
+plt.bar(abs, ord)
+plt.show()
+
+            </code>
+        </pre>
+    </div>
+
+
+    <h3>
+        Une Quelconque 
+    </h3>
+    <div class = "bruh">
+    <pre class = "explication">
+        Nous voila enfin arrivé à la fin des VA discrètes.
+        Malheureusement je ne peut pas donner une recette magique qui donne toujours ce qu'il faut écrire.
+        Mais lire tout ce qui précède permet de comprendre comment aborder la question.
+
+        1. Si on nous donne P(X=k):
+            Si on a P(X=k) alors il suffit de faire comme j'ai fait lorsque j'ai écrit ma propre version de la poissonienne:
+                - definir une fonction F avec les paramètres nécessaires qui calcule P(X=k)
+                - definir l'axe des abscisses qui correspond à X(Omega) (ou du moins la partie oû 99% des valeurs sont: 
+                    pas besoin d'aller jusqu'à infini si le support est N ou N*)
+                - définir l'axe des ordonnées, qui correspond à l'image par F de chaque élément dans l'axe des abscisses
+                - choisir quelle forme de représentation est souhaitée (plt.plot? plt.bar?)
+                - et voilà! 
+            Le squelette du programme:
+                <code class = "language-python" style = "font-size: 60px;">
+                    def f(paramètre_1, paramètre_2, ..., x):
+                        ...
+                        return ...
+                    paramètre_1 = ...
+                    paramètre_2 = ...
+                    ...
+
+                    abs = [...] 
+                    ord = [f(k) for k in abs]
+                    plt.bar(abs, ord)
+                    plt.show()
+                </code>
+
+        2. Si on a pas P(X= k)
+            Alors on devrait au moins nous donner une explication de l'expérience qu'on réalise, ce que compte la VA, etc.
+            A partir de ces infos on doit:
+                - établir une fonction qui simule cette expérience qui renvoit une liste contenant le résultat un nombre choisi de simulations indépendantes
+                - définir l'axe des abscisses (qui correspond en réalité à X(Omega))
+                - définir l'axe des ordonnées, qui correspond au nombre de fois que chaque élement de l'axe des abscisses 
+                    apparait dans la liste des résultats, qu'on divise par le nombre de simulations qu'on a réalisé (pour tomber sur une probibilité)
+                - choisir comment on veut afficher notre graphique
+                - et c'est gagné! 
+            Le squelette du program:
+            <code class = "language-python" style = "font-size: 60px;">
+                def simulation_va(paramètre_1, paramètre_2, ... , nombre_de_simulations):
+                    resultats = []
+                    for j in range(nombre_de_simulations):
+                        ...
+                        resultats.append(...)
+                    return resultats
+                paramètre_1 = ...
+                paramètre_2 = ...
+                ...
+                nombre_de_simulations = 10000 # Par exemple
+                simulations = simulation_va(paramètre_1, paramètre_2, ..., nombre_de_simulations)
+                abscisses = [...]
+                ordonnees = [] # on initalise la liste contenant les ordonnées
+                for k in abscisses:
+                    n = simulations.count(k)/nombre_de_simulations
+                    ordonnees.append(n)
+                plt.bar(abscisses, ordonnees)
+                plt.show()
+            </code>
+        Remarque: dans ma <a href = "#mon_uniforme" style = "color:red">définition de l'uniforme</a> (et a priori seulement à ce moment-là) j'ai définit mon axe des
+        ordonnées par une liste en une ligne, plutôt que sur 4 lignes comme je l'ai fait pour les autres 
+    </pre>
+    </div>
+
+    <div id= "returntomenu">
+        <a href = 'index.html'>
+            Retour au menu 
+        </a>
+    </div>
+    <script src="script.js"></script>
+    </body>
+</html>
